@@ -1,18 +1,26 @@
 import { Inject, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { SessionOptions } from 'express-session'
+import { ConfigModule, ConfigType } from '@nestjs/config'
 import * as passport from 'passport'
 import * as session from 'express-session'
+import * as RedisStore from 'connect-redis'
+import { REDIS, RedisModule } from './redis.module'
 import sessionConfig from 'src/config/session.config'
-import { ConfigModule, ConfigType } from '@nestjs/config'
-import { SessionOptions } from 'express-session'
+import { RedisClient } from 'redis'
 
 @Module({
-  imports: [ConfigModule.forFeature(sessionConfig)]
+  imports: [
+    ConfigModule.forFeature(sessionConfig),
+    RedisModule
+  ]
 })
 export class SessionModule implements NestModule {
   
   constructor(
     @Inject(sessionConfig.KEY)
     private readonly config: ConfigType<typeof sessionConfig>,
+    @Inject(REDIS)
+    private readonly redis: RedisClient
   ) {}
 
   configure(consumer: MiddlewareConsumer) {
@@ -31,6 +39,8 @@ export class SessionModule implements NestModule {
       _sessionConfig.secret = process.env.SESSION_SECRET
       _sessionConfig.cookie.secure = process.env.COOKIE_SECURE
     }
+    
+    _sessionConfig.store = new (RedisStore(session))({ client: this.redis, logErrors: true })
 
     return _sessionConfig
   }
