@@ -8,6 +8,7 @@ import sessionConfig from './config/session.config'
     ConfigModule.forRoot({
       load: [sessionConfig],
       cache: true,
+      isGlobal: true,
     })
   ]
 })

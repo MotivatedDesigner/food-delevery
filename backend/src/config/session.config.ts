@@ -1,13 +1,9 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from "@nestjs/config"
+console.log(process.env.PORT);
 
 export default registerAs('session', () => ({ 
-  secret: process.env.session?.secret || 'my-secret',
+  secret: 'my-secret',
   resave: false,
   saveUninitialized: false,
+  name: 'session'
 }))
-
-export interface SessionConfig {
-  secret: string;
-  resave: boolean;
-  saveUninitialized: boolean;
-}
