@@ -1,7 +1,7 @@
 
 import { Controller, Post, Req, Session, Get, UseGuards } from '@nestjs/common'
 import { Request } from 'express'
-import { AuthenticatedGuard } from './guards/authenticated.guard'
+import { IsLoggedInGuard } from './guards/is-logged-in.guard'
 import { LocalGuard } from './guards/local.guard'
 
 @Controller('auth')
@@ -14,7 +14,7 @@ export class AuthController {
   }
 
   @Get('test')
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(IsLoggedInGuard)
   async test(@Req() req: Request) {
     return req.user
   }
