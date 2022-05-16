@@ -37,7 +37,7 @@ export class SessionModule implements NestModule {
 
     if(process.env.NODE_ENV === 'production') {
       _sessionConfig.secret = process.env.SESSION_SECRET
-      _sessionConfig.cookie.secure = process.env.COOKIE_SECURE
+      _sessionConfig.cookie.secure = process.env.COOKIE_SECURE === 'true'
     }
     
     _sessionConfig.store = new (RedisStore(session))({ client: this.redis, logErrors: true })
