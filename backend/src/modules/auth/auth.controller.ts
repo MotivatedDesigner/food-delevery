@@ -1,6 +1,7 @@
 
-import { Controller, Post, Req, Session, Get, UseGuards } from '@nestjs/common'
+import { Controller, Post, Req, Body, Get, UseGuards } from '@nestjs/common'
 import { Request } from 'express'
+import { SignInLocalDto } from './dtos/sign-up-local.dto'
 import { IsLoggedInGuard } from './guards/is-logged-in.guard'
 import { LocalGuard } from './guards/local.guard'
 
@@ -9,13 +10,11 @@ export class AuthController {
 
   @Post('signin')
   @UseGuards(LocalGuard)
-  async signin(@Req() req: Request) {
-    return req.user
-  }
+  async signInLocal(@Body() signInLocalDto: SignInLocalDto) {}
 
   @Get('test')
   @UseGuards(IsLoggedInGuard)
-  async test(@Req() req: Request) {
+  async signup(@Req() req: Request) {
     return req.user
   }
 }
